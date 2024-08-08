@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from tasks.models import Task
 from tasks.serializers import TaskSerializer
@@ -24,3 +25,10 @@ from tasks.serializers import TaskSerializer
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
+
+
+class TaskListView(APIView):
+    def get(self, request):
+        queryset = Task.objects.all()
+        serializer = TaskSerializer(queryset, many=True)
+        return Response(serializer.data, 200)
